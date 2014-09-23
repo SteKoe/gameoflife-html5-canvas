@@ -28,7 +28,8 @@ function GameOfLiveCanvas(canvasId, cols, rows, options) {
 	var ctx = canvas.getContext("2d");
 	var canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
 
-	function drawPoint(x, y, color) {
+	// Private
+	drawPoint = function(x, y, color) {
 		if (x == 0) {
 			dx = 0;
 		} else {
@@ -52,13 +53,15 @@ function GameOfLiveCanvas(canvasId, cols, rows, options) {
 		ctx.fill();
 	}
 
+	// Public
 	this.alive = function(x, y) {
 		drawPoint(x, y, options.colorAlive)
 	}
+	// Public
 	this.dead = function(x, y) {
 		drawPoint(x, y, options.colorDead)
 	}
-
+	// Public
 	this.clear = function() {
 		for (x = 0; x <= cols; x++) {
 			for (y = 0; y <= rows; y++) {
