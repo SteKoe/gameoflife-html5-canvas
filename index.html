@@ -10,47 +10,32 @@
 <body>
 	<div class="container">
 		<h1>Game of life</h1>
-		<canvas id="myCanvas" width="200" height="200"></canvas>
+		<canvas id="myCanvas"></canvas>
 	</div>
 	<script type="text/javascript" src="vendors/jquery/jquery.min.js"></script>
 	<script type="text/javascript" src="vendors/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="GameOfLifeCanvas.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			var golCanvas = new GameOfLiveCanvas("myCanvas", 200, 200, {size:2});
+			var width = 100;
+			var height = 100;
 			
-			var t = [
-			         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-			         [0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0,0],
-			         [0,0,0,0,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,0,0,0,0],
-			         [0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],
-			         [0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],
-			         [0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
-			         [0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
-			         [0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
-			         [0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],
-			         [0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],
-			         [0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0],
-			         [0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0],
-			         [0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
-			         [0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],
-			         [0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
-			         [0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0],
-			         [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]
-	         ];
-			
-			function test() {
-				var y = Math.floor((Math.random() * t.length)); 
-				var x = Math.floor((Math.random() * t[0].length));
-				
-				if(t[y][x] == 1) {
-					golCanvas.alive(x,y);
-					
-					golCanvas.alive(x+25, y);
-				}
+			var canvasOptions = {
+					size: 5,
+					figure: 'square',
+					colorAlive: 'red'
 			}
 			
-			window.setInterval(test, 0);
+			var golCanvas = new GameOfLiveCanvas("myCanvas", width, height, canvasOptions);
+
+			function render() {
+				var y = Math.floor((Math.random() * height)); 
+				var x = Math.floor((Math.random() * width));
+				
+				golCanvas.alive(x,y);
+			}
+			
+			window.setInterval(render, 10);
 		});
 	</script>
 </body>
