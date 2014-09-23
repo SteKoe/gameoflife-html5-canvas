@@ -19,43 +19,47 @@
 		$(document).ready(function() {
 			var width = 50;
 			var height = 50;
-			
+			var stop = false;
 			var canvasOptions = {
-					size: 5,
-					figure: 'square',
-					colorAlive: 'red'
+					size: 10,
+					figure: 'square'
 			}
 			
-			var bacon = [
-				[2,2],[2,3],[3,2],[3,3],[4,4],[4,5],[5,4],[5,5]
-			];
-			var glider = [
-				[2,0],[4,0],[1,1],[1,2],[1,3],[4,3],[1,4],[2,4],[3,4]
-			];
-			var current = glider;
-			
-			var golCanvas = new GameOfLiveCanvas("myCanvas", width, height);
+			var golCanvas = new GameOfLiveCanvas("myCanvas", width, height, canvasOptions);
 			function render() {
-				golCanvas.clear();
-				for(i = 0; i < current.length; i++) {
-					golCanvas.alive(current[i][0], current[i][1]);
-				}
-				
-				// current an server senden
+				current = golCanvas.getAlive();
 				$.ajax({
-					url: 'http://127.0.0.1:3000/stepper',
+					url: 'http://127.0.0.1/clj/stepper',
 					type: 'post',
 					contentType: 'text/plain',
 					data: JSON.stringify(current)
 				}).done(function(data){
 					current = data;
 					window.setTimeout(function(){
-						render();
+						golCanvas.clear();
+						for(i = 0; i < current.length; i++) {
+							golCanvas.alive(current[i][0], current[i][1]);
+						}
+						if(!stop) {
+							render();
+						}
 					}, 100);
 				});
 			}
-			render();
+			function stopRender() {
+				stop = true;
+			}
+			
+			$('#run').on('click',function(){
+				stop = false;
+				render();
+			});
+			$('#stop').on('click',function(){
+				stopRender();
+			});
 		});
 	</script>
+	<button id="run" class="btn btn-success">Run!</button>
+	<button id="stop" class="btn btn-danger">Stop!</button>
 </body>
 </html>

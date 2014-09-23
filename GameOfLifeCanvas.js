@@ -11,13 +11,16 @@ function GameOfLiveCanvas(canvasId, cols, rows, options) {
 	}
 	var canvasId = canvasId;
 	var defaultOptions = {
-		'size' : 5,
-		'colorDead' : '#dddddd',
-		'colorAlive' : '#000000',
-		'figure' : 'rect'
+		size : 5,
+		colorDead : '#dddddd',
+		colorAlive : '#000000',
+		figure : 'rect'
 	}
+	
+	var alive = [];
 
 	var options = mergeOptions(defaultOptions, options);
+	var that = this;
 
 	var canvas = document.getElementById(canvasId);
 	canvas.width = cols * (options.size + 1);
@@ -25,8 +28,29 @@ function GameOfLiveCanvas(canvasId, cols, rows, options) {
 
 	var canvasWidth = canvas.width;
 	var canvasHeight = canvas.height;
+	var canvasLeft = canvas.offsetLeft;
+	var canvasTop = canvas.offsetTop;
 	var ctx = canvas.getContext("2d");
 	var canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+
+	canvas.addEventListener('click', function(e) {
+		var x;
+		var y;
+		if (e.pageX || e.pageY) {
+			x = e.pageX;
+			y = e.pageY;
+		} else {
+			x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+			y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+		}
+		x -= canvas.offsetLeft;
+		y -= canvas.offsetTop;
+		x = x / (canvas.width / cols);
+		y = y / (canvas.height / rows);
+		x = Math.floor(x);
+		y = Math.floor(y);
+		that.alive(x,y);
+	}, false);
 
 	// Private
 	drawPoint = function(x, y, color) {
@@ -43,9 +67,9 @@ function GameOfLiveCanvas(canvasId, cols, rows, options) {
 		}
 
 		ctx.beginPath();
-		
-		if(options.figure == "arc") {
-			ctx.arc(dx + options.size/2, dy + options.size/2, options.size/2, 0, 2 * Math.PI);
+
+		if (options.figure == "arc") {
+			ctx.arc(dx + options.size / 2, dy + options.size / 2, options.size / 2, 0, 2 * Math.PI);
 		} else {
 			ctx.rect(dx, dy, options.size, options.size);
 		}
@@ -53,8 +77,13 @@ function GameOfLiveCanvas(canvasId, cols, rows, options) {
 		ctx.fill();
 	}
 
+	this.getAlive = function() {
+		return alive;
+	}
+
 	// Public
 	this.alive = function(x, y) {
+		alive.push([x,y]);
 		drawPoint(x, y, options.colorAlive)
 	}
 	// Public
@@ -63,6 +92,7 @@ function GameOfLiveCanvas(canvasId, cols, rows, options) {
 	}
 	// Public
 	this.clear = function() {
+		alive = [];
 		for (x = 0; x <= cols; x++) {
 			for (y = 0; y <= rows; y++) {
 				this.dead(x, y);
