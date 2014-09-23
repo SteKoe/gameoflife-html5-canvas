@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="vendors/bootstrap/css/bootstrap-theme.min.css"
+	rel="stylesheet" />
+</head>
+<body>
+	<div class="container">
+		<h1>Game of life</h1>
+		<canvas id="myCanvas" width="200" height="200"></canvas>
+	</div>
+	<script type="text/javascript" src="vendors/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="vendors/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="GameOfLifeCanvas.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var golCanvas = new GameOfLiveCanvas("myCanvas", 200, 200, {size:2});
+			
+			var t = [
+			         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			         [0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,0,0,0],
+			         [0,0,0,0,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,0,0,0,0],
+			         [0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],
+			         [0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],
+			         [0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
+			         [0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
+			         [0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
+			         [0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],
+			         [0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],
+			         [0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0],
+			         [0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0],
+			         [0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
+			         [0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],
+			         [0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
+			         [0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0],
+			         [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]
+	         ];
+			
+			function test() {
+				var y = Math.floor((Math.random() * t.length)); 
+				var x = Math.floor((Math.random() * t[0].length));
+				
+				if(t[y][x] == 1) {
+					golCanvas.alive(x,y);
+					
+					golCanvas.alive(x+25, y);
+				}
+			}
+			
+			window.setInterval(test, 0);
+		});
+	</script>
+</body>
+</html>
